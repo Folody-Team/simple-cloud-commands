@@ -1,2 +1,3 @@
 const text = args.slice().join("");
-message.reply(`Say: ${text}`)
+if(text.includes("@everyone" || "@here") return message.reply("Please don't ping everyone");
+message.reply(`Say: ${text}`);
