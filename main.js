@@ -12,15 +12,17 @@ client.login("TOKEN HERE").then(() => {
         if (message.content.startsWith("!")) {
             const args = message.content.slice(1).split(" ");
             const command = args.shift().toLowerCase();
-            fetch("https://raw.githubusercontent.com/Folody-Team/simple-cloud-commands/commands-data/commands.json").then(res =>  res.json()).then(data => {
-                if (data.includes(command)) {
-                    fetch(`https://raw.githubusercontent.com/Folody-Team/simple-cloud-commands/commands/${command}.js`).then(res => res.text()).then(code => {
-                        eval(((message, args) => {
-                            return code;
-                        })(message, args));
-                    });
-                }
-            });
+            if (command) {
+                fetch(`https://raw.githubusercontent.com/Folody-Team/simple-cloud-commands/commands/${command}.js`).then(res => {
+                    if (res.status === 200) {
+                        res.text().then(code => {
+                            eval('(function() {' + code + '}())');
+                        });
+                    } else {
+                        message.channel.send("Command not found!");
+                    }
+                });
+            }
         }
     });
 
